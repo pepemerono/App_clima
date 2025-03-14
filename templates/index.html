@@ -1,0 +1,93 @@
+<!DOCTYPE html>     
+<html lang="es">
+
+<head>
+      <meta charset="UTF-8"> 
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+      <title>Aplicación del Clima</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+      <link href="https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet">
+      
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">    
+
+
+</head>
+
+<body>
+    <h1>
+        <span>C</span><span>o</span><span>n</span><span>s</span><span>u</span><span>l</span><span>t</span><span>a</span>&nbsp;
+        <span>e</span><span>l</span>&nbsp;
+        <span>c</span><span>l</span><span>i</span><span>m</span><span>a</span>
+    </h1>
+
+    <h2 class="japanese-title">天気をチェックする</h2>
+
+      <form method="POST">     
+        <div class="form-container">
+          <label for="city" class="label-title">Introduce el nombre de una ciudad:</label>
+
+          <select name="city" id="city">
+           <option value="Tokio">Tokio</option>
+           <option value="Osaka">Osaka</option>
+           <option value="Kioto">Kioto</option>
+           <option value="Nagoya">Nagoya</option>
+           <option value="San Javier">San Javier</option>
+          </select>
+
+          <input type="text" name="custom_city" id="custom_city" placeholder="Busca otra ciudad">
+          <button type="submit">Buscar</button>
+        </div>
+      </form>
+
+      <p class="city-status">Ciudad detectada: <span id="city-name">No detectada</span></p>
+
+
+      {% if weather%}  
+         {% if 'error' in weather %}
+            <p class="error-msg">{{ weather['error'] }}</p> <!-- Mensaje de error -->
+         {% else %}
+           <div class="weather-container">   
+              <h2 class="city-title">Clima en {{ weather['name'] }}</h2>
+              <p><strong>Temperatura:</strong> {{ weather['main']['temp'] }}°C</p>
+              <p><strong>Condiciones:</strong> {{ weather['weather'][0]['description'] }}</p>
+              <p><strong>Viento:</strong> {{ weather['wind']['speed'] }} m/s, {{ weather['wind']['deg'] }}°</p>
+              <p><strong>Presion:</strong> {{weather['main']['pressure'] }}hPa</p>
+              <img src="http://openweathermap.org/img/wn/{{ weather['weather'][0]['icon'] }}@2x.png" alt="Icono del clima">
+
+              <img src="{{ url_for('static', filename='gifs/naruto_run.gif') }}" alt="Cargando..." />
+              
+              <div class="message-bubble">
+                 <p>{{ weather['message'] }}</p>
+                 <div class="bubble-thought one"></div>
+                 <div class="bubble-thought two"></div>
+              </div>
+          </div>
+      {% endif %}
+      {% endif %}
+
+      
+ <!-- Aqui habia un fragmento de JS donde se hacia la funcion de geolocalización que he eliminado para pasarla al backend  -->
+      
+
+<audio id="background-music" loop>
+    <source src="{{ url_for('static', filename='music/さんぽ (BossaNova Version).mp3') }}" type="audio/mp3">
+    Tu navegador no soporta la etiqueta de audio.
+</audio>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var audio = document.getElementById("background-music");
+        // Intentamos reproducir el audio al cargar la página
+        audio.play().catch(function(error) {
+            // Si falla (por ejemplo, por restricciones del navegador), logueamos el error
+            console.log("No se pudo reproducir el audio automáticamente, espera a la interacción del usuario.", error);
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
